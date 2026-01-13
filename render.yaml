@@ -20,12 +20,13 @@ services:
         value: 30
       - key: CLEANUP_INTERVAL_SECONDS
         value: 60
+      - key: UPLOAD_DIR
+        value: /tmp/uploads
 
-    # Persistent disk for uploads
-    disk:
-      name: uploads
-      mountPath: /app/uploads
-      sizeGB: 10
+    # NOTE: Free tier doesn't support persistent disks
+    # Files will be stored in /tmp and lost on restart
+    # For persistent storage, upgrade to a paid plan ($7/month)
+    # or use external storage like AWS S3, Cloudinary, etc.
 
     # Health check using the /api/time endpoint
     healthCheckPath: /api/time
