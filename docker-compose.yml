@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: share-me-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - UPLOAD_DIR=/app/uploads
+      - MAX_FILE_SIZE=104857600
+      - ROOM_EXPIRATION_MINUTES=30
+      - CLEANUP_INTERVAL_SECONDS=60
+    volumes:
+      # Persist uploads across container restarts
+      - ./backend/uploads:/app/uploads
+      # Persist logs
+      - ./backend/logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:5000/api/time', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    networks:
+      - share-me-network
+
+networks:
+  share-me-network:
+    driver: bridge

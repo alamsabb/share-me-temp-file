@@ -1,0 +1,10 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Disallow admin or sensitive paths (if any)
+# Disallow: /admin
+
+# Sitemap location
+Sitemap: https://share.alamgroup.in/sitemap.xml
+
