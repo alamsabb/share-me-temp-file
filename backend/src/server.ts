@@ -6,12 +6,6 @@ import { Logger } from "./utils/logger";
 
 async function bootstrap(): Promise<void> {
   try {
-    await fileService.ensureUploadDirectory();
-
-    await cleanupJob.runStartupCleanup();
-
-    cleanupJob.start();
-
     const app = createApp();
 
     app.listen(CONFIG.PORT, () => {
@@ -20,6 +14,11 @@ async function bootstrap(): Promise<void> {
         env: CONFIG.NODE_ENV,
       });
     });
+    await fileService.ensureUploadDirectory();
+
+    await cleanupJob.runStartupCleanup();
+
+    cleanupJob.start();
 
     process.on("SIGTERM", () => {
       Logger.info("SIGTERM received, shutting down gracefully");
