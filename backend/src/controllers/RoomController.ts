@@ -75,6 +75,22 @@ export class RoomController {
       next(error);
     }
   }
+
+  // Public health check endpoint (no authentication required)
+  async healthCheck(
+    _req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      res.status(HTTP_STATUS.OK).json({
+        status: "healthy",
+        timestamp: Date.now(),
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export const roomController = new RoomController();

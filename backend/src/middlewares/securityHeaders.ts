@@ -13,8 +13,18 @@ export function originValidation(
 ): void {
   const origin = req.get("origin");
   const referer = req.get("referer");
+  console.log("Origin:", origin);
+  console.log("Referer:", referer);
+  console.log("Path:", req.path);
+  console.log("IP:", req.ip);
 
-  // Skip validation for health check endpoint
+  // Skip validation for health check endpoint (used by Render/monitoring)
+  if (req.path === "/api/health") {
+    console.log("Health check request - allowing request");
+    return next();
+  }
+
+  // Skip validation for time endpoint (used for client sync)
   if (req.path === "/api/time") {
     return next();
   }
