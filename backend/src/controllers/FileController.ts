@@ -26,6 +26,7 @@ export class FileController {
         file: fileMetadata,
       });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }

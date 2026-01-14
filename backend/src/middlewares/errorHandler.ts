@@ -20,6 +20,7 @@ export function errorHandler(
 
   const statusCode = err.statusCode || HTTP_STATUS.INTERNAL_SERVER_ERROR;
   const message = err.message || "Internal server error";
+  console.log(err);
 
   res.status(statusCode).json({
     error: message,

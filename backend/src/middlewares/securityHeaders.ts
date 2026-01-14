@@ -29,9 +29,31 @@ export function originValidation(
     return next();
   }
 
-  // In development, allow requests without origin/referer
-  if (CONFIG.NODE_ENV === "development") {
-    return next();
+  // Handle requests with no origin
+  if (!origin) {
+    // Allow GET requests (downloads, page navigation)
+    if (req.method === "GET") {
+      return next();
+    }
+
+    // specific check for development
+    if (CONFIG.NODE_ENV === "development") {
+      return next();
+    }
+
+    // Block non-GET requests without origin in production
+    Logger.warn(
+      "Origin validation failed - Missing origin for non-GET request",
+      {
+        path: req.path,
+        method: req.method,
+        ip: req.ip,
+      }
+    );
+    res.status(403).json({
+      error: "Forbidden - Missing origin",
+    });
+    return;
   }
 
   // Validate origin header

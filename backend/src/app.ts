@@ -47,13 +47,14 @@ export function createApp(): Application {
   app.use(
     cors({
       origin: (origin, callback) => {
-        // Allow requests with no origin (mobile apps, curl, postman) in development
-        if (!origin && CONFIG.NODE_ENV === "development") {
+        // Allow requests with no origin (mobile apps, curl, postman, direct downloads)
+        // We will validate logic in the originValidation middleware
+        if (!origin) {
           return callback(null, true);
         }
 
         // Check if origin is in whitelist
-        if (origin && CONFIG.ALLOWED_ORIGINS.includes(origin)) {
+        if (CONFIG.ALLOWED_ORIGINS.includes(origin)) {
           callback(null, true);
         } else {
           Logger.warn("CORS blocked request from origin", { origin });
