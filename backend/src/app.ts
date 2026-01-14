@@ -32,6 +32,17 @@ export function createApp(): Application {
     })
   );
 
+  // Health check endpoint - placed BEFORE CORS and other security middleware
+  // to ensure it's always accessible by monitoring services (like Render)
+  // which might not send Origin headers.
+  app.get("/api/health", (_req, res) => {
+    res.status(200).json({
+      status: "healthy",
+      timestamp: Date.now(),
+      uptime: process.uptime(),
+    });
+  });
+
   // Strict CORS configuration
   app.use(
     cors({

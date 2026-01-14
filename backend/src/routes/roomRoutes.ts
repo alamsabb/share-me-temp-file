@@ -19,7 +19,6 @@ const router = Router();
 
 // Public health check endpoint (no security middleware)
 // Must be first to avoid rate limiting and CORS checks
-router.get("/health", roomController.healthCheck.bind(roomController));
 
 router.get("/time", roomController.getServerTime.bind(roomController));
 
