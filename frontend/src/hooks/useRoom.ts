@@ -32,11 +32,16 @@ export function useRoomDetails(
   });
 }
 
+export type UploadVariables = {
+  file: File;
+  onProgress?: (progress: number) => void;
+};
+
 export function useUploadFile(
-  code: string,
-  onProgress?: (progress: number) => void
-): UseMutationResult<UploadFileResponse, Error, File> {
+  code: string
+): UseMutationResult<UploadFileResponse, Error, UploadVariables> {
   return useMutation({
-    mutationFn: (file: File) => roomApi.uploadFile(code, file, onProgress),
+    mutationFn: ({ file, onProgress }) =>
+      roomApi.uploadFile(code, file, onProgress),
   });
 }
